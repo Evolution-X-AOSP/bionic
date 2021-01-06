@@ -53,6 +53,7 @@ struct CpuVariantNames {
 
 static constexpr CpuVariantNames cpu_variant_names[] = {
     {"cortex-a76", kCortexA55},
+    {"cortex-a77", kCortexA77},
     {"kryo385", kCortexA55},
     {"kryo585", kCortexA77},
     {"cortex-a75", kCortexA55},

@@ -40,6 +40,7 @@ enum CpuVariant {
     kCortexA9,
     kCortexA53,
     kCortexA55,
+    kCortexA77,
     kKrait,
     kKryo,
 };
@@ -53,6 +54,7 @@ struct CpuVariantNames {
 static constexpr CpuVariantNames cpu_variant_names[] = {
     {"cortex-a76", kCortexA55},
     {"kryo385", kCortexA55},
+    {"kryo585", kCortexA77},
     {"cortex-a75", kCortexA55},
     {"kryo", kKryo},
     {"cortex-a73", kCortexA55},
@@ -165,6 +167,8 @@ DEFINE_IFUNC_FOR(__memcpy) {
             RETURN_FUNC(__memcpy_func, __memcpy_a53);
         case kCortexA55:
             RETURN_FUNC(__memcpy_func, __memcpy_a55);
+        case kCortexA77:
+            RETURN_FUNC(__memcpy_func, __memcpy_a77);
         case kKryo:
             RETURN_FUNC(__memcpy_func, __memcpy_kryo);
         default:
@@ -178,6 +182,7 @@ DEFINE_IFUNC_FOR(__memset_chk) {
         case kCortexA7:
         case kCortexA53:
         case kCortexA55:
+        case kCortexA77:
         case kKryo:
             RETURN_FUNC(__memset_chk_func, __memset_chk_a7);
         case kCortexA9:
@@ -195,6 +200,7 @@ DEFINE_IFUNC_FOR(memset) {
         case kCortexA7:
         case kCortexA53:
         case kCortexA55:
+        case kCortexA77:
         case kKryo:
              RETURN_FUNC(memset_func, memset_a7);
         case kCortexA9:
@@ -230,6 +236,8 @@ DEFINE_IFUNC_FOR(__strcpy_chk) {
             RETURN_FUNC(__strcpy_chk_func, __strcpy_chk_a53);
         case kCortexA55:
             RETURN_FUNC(__strcpy_chk_func, __strcpy_chk_a55);
+        case kCortexA77:
+            RETURN_FUNC(__strcpy_chk_func, __strcpy_chk_a77);
         default:
             RETURN_FUNC(__strcpy_chk_func, __strcpy_chk_a15);
     }
@@ -269,6 +277,8 @@ DEFINE_IFUNC_FOR(__strcat_chk) {
             RETURN_FUNC(__strcat_chk_func, __strcat_chk_a53);
         case kCortexA55:
             RETURN_FUNC(__strcat_chk_func, __strcat_chk_a55);
+        case kCortexA77:
+            RETURN_FUNC(__strcat_chk_func, __strcat_chk_a77);
         default:
             RETURN_FUNC(__strcat_chk_func, __strcat_chk_a15);
     }

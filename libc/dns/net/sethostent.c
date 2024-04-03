@@ -164,6 +164,7 @@ _hf_gethtbyname2(const char *name, int af, struct getnamaddr *info)
 
 	if ((ptr = buf = malloc(len = info->buflen)) == NULL) {
 		*info->he = NETDB_INTERNAL;
+		endhostent_r(&hf);
 		return NULL;
 	}
 
@@ -248,6 +249,7 @@ _hf_gethtbyname2(const char *name, int af, struct getnamaddr *info)
 	return hp;
 nospc:
 	*info->he = NETDB_INTERNAL;
+	endhostent_r(&hf);
 	free(buf);
 	errno = ENOSPC;
 	return NULL;

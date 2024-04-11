@@ -368,11 +368,15 @@ static bool InstallHooks(libc_globals* globals, const char* options, const char*
   return true;
 }
 
+#if defined(USE_SCUDO)
 extern "C" const char* __scudo_get_stack_depot_addr();
 extern "C" const char* __scudo_get_region_info_addr();
 extern "C" const char* __scudo_get_ring_buffer_addr();
 extern "C" size_t __scudo_get_ring_buffer_size();
 extern "C" size_t __scudo_get_stack_depot_size();
+#else
+extern "C" void je_set_zero_filling(bool val);
+#endif
 
 // Initializes memory allocation framework once per process.
 static void MallocInitImpl(libc_globals* globals) {
@@ -387,6 +391,13 @@ static void MallocInitImpl(libc_globals* globals) {
   __libc_shared_globals()->scudo_ring_buffer = __scudo_get_ring_buffer_addr();
   __libc_shared_globals()->scudo_ring_buffer_size = __scudo_get_ring_buffer_size();
   __libc_shared_globals()->scudo_stack_depot_size = __scudo_get_stack_depot_size();
+#else
+  // Check if the process wants zero-filling
+  char* env = getenv("JE_MALLOC_ZERO_FILLING");
+  if (env && strcmp(env, "1") == 0) {
+    async_safe_format_log(ANDROID_LOG_WARN, "libc", "Enabling jemalloc zero-filling");
+    je_set_zero_filling(true);
+  }
 #endif
 
   // Prefer malloc debug since it existed first and is a more complete
